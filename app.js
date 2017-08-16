@@ -70,7 +70,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   // https://github.com/expressjs/session#options
-  secret: 'keyboard cat a',
+  secret: config.SECRET,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 31 // ten seconds, for testing
   },
