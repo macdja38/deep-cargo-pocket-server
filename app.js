@@ -25,7 +25,7 @@ app.use(cors({
 
 const r = require('rethinkdbdash')({
   servers: [
-    {host: 'localhost', port: 28015},
+    config.RETHINKDB,
   ],
 });
 
@@ -39,7 +39,7 @@ const store = new RDBStoreSession(r, {
 // Passport Set up
 const pocketStrategy = new PocketStrategy({
     consumerKey: config.POCKET_CONSUMER_KEY,
-    callbackURL: "http://127.0.0.1:3001/auth/pocket/callback",
+    callbackURL: `${config.CLIENT_URL}/api/auth/pocket/callback`,
   }, function (username, accessToken, done) {
     console.log(username, accessToken);
     process.nextTick(function () {
@@ -93,7 +93,7 @@ app.get('/login',
 
 app.get('/auth/pocket/callback', passport.authenticate('pocket', {failureRedirect: '/login'}),
   function (req, res) {
-    res.redirect(res.redirect(config.CLIENT_URL));
+    res.redirect(config.CLIENT_URL);
   });
 
 app.use('/home', (req, res, done) => {

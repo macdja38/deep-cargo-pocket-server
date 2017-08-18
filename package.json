@@ -16,6 +16,7 @@
     "morgan": "~1.8.1",
     "passport": "^0.4.0",
     "passport-pocket": "^1.0.0",
+    "pocket-promise": "git+https://github.com/macdja38/pocket-promise.git",
     "rethinkdbdash": "^2.3.31",
     "serve-favicon": "~2.4.2",
     "session-rethinkdb": "^2.0.0"
