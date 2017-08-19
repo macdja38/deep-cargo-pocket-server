@@ -28,8 +28,8 @@ function getActions(url, action, tags, title, tagCheck) {
     urls = [];
     for (let i = smallNum; i <= bigNum; i++) {
       const actionInstance = {url: url.replace(/{\d+-\d+}/, i), action};
-      if (tags) {
-        let tagArray = tags.split(",").map(t => t.trim());
+      if (tags || tagCheck) {
+        let tagArray = (tags || "").split(",").map(t => t.trim());
         if (tagCheck) {
           tagArray.push(`c${i}`);
         }
