@@ -14,9 +14,10 @@ router.get('/', function (req, res, next) {
  * @param {string} action
  * @param {string} [tags]
  * @param {string} [title]
+ * @param {boolean} [tagCheck]
  * @returns {[{action: string, url: string, tag: string, title: string}]}
  */
-function getActions(url, action, tags, title) {
+function getActions(url, action, tags, title, tagCheck) {
   let match = url.match(/{(\d+)-(\d+)}/);
   let urls;
   if (!match) {
@@ -29,7 +30,9 @@ function getActions(url, action, tags, title) {
       const actionInstance = {url: url.replace(/{\d+-\d+}/, i), action};
       if (tags) {
         let tagArray = tags.split(",").map(t => t.trim());
-        tagArray.push(`c${i}`);
+        if (tagCheck) {
+          tagArray.push(`c${i}`);
+        }
         actionInstance.tags = tagArray.join(",");
       }
       if (title) {
@@ -45,7 +48,7 @@ router.post('/add', function (req, res, next) {
   console.log(req.body);
   let rawURL = req.body.urls;
 
-  const actions = getActions(rawURL, "add", req.body.tags, req.body.title);
+  const actions = getActions(rawURL, "add", req.body.tags, req.body.title, req.body.tagCheck);
 
   const pocket = new Pocket({consumer_key: config.POCKET_CONSUMER_KEY, access_token: req.user.accessToken});
 
