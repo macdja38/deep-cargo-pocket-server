@@ -28,7 +28,9 @@ function getActions(url, action, tags, title) {
     for (let i = smallNum; i <= bigNum; i++) {
       const actionInstance = {url: url.replace(/{\d+-\d+}/, i), action};
       if (tags) {
-        actionInstance.tags = tags;
+        let tagArray = tags.split(",").map(t => t.trim());
+        tagArray.push(`c${i}`);
+        actionInstance.tags = tagArray.join(",");
       }
       if (title) {
         actionInstance.title = `${title} - ${i}`;
