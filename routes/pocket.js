@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const config = require('../config');
 const Pocket = require('pocket-promise');
 
@@ -54,7 +54,17 @@ router.post('/add', function (req, res, next) {
 
   console.log("actions", actions);
 
-  pocket.modify({actions}).then(result => {
+  let resultPromise;
+
+  if (req.body.slowCheck) {
+    resultPromise = Promise.all(actions.map((action, index) => PromiseDelay(index * 1000)
+      .then(() => pocket.add({url: action.url, tags: action.tags, title: action.title}))
+    )).then(resultArray => ({action_results: resultArray.map(item => item.item)}));
+  } else {
+    resultPromise = pocket.modify({actions})
+  }
+
+  resultPromise.then(result => {
     console.log(result);
     res.json(result)
   }).catch((error) => {
@@ -62,5 +72,11 @@ router.post('/add', function (req, res, next) {
     res.sendStatus(500);
   });
 });
+
+function PromiseDelay(time) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time)
+  })
+}
 
 module.exports = router;
