@@ -1,3 +1,4 @@
+const Raven = require('raven');
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
@@ -5,18 +6,19 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const PocketStrategy = require('passport-pocket');
+const cors = require('cors');
+const session = require('express-session');
+const RDBStore = require('session-rethinkdb');
+
+const config = require('./config');
+Raven.config(config.SENTRY_DSN).install();
 
 const pocket = require('./routes/pocket');
 const users = require('./routes/users');
 
-const cors = require('cors');
-
-const config = require('./config');
-
-const session = require('express-session');
-const RDBStore = require('session-rethinkdb');
-
 const app = express();
+
+app.use(Raven.requestHandler());
 
 app.use(cors({
   origin: config.ORIGINS,
@@ -81,6 +83,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('/break', function mainHandler(req, res) {
+  throw new Error('Broke!');
+});
+
 app.get('/login',
   passport.authenticate('pocket'),
   function (req, res) {
@@ -103,8 +109,11 @@ app.use('/home', (req, res, done) => {
 app.use('/pocket', pocket);
 app.use('/user', users);
 
+app.use(Raven.errorHandler());
+
+
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use('*', function (req, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -119,7 +128,11 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.send(err.message);
+  if (req.accepts('html')) {
+    res.send(res.sentry + '<br>' + err.message);
+  } else {
+    res.send(err.message);
+  }
 });
 
 module.exports = app;

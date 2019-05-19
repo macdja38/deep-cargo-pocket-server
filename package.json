@@ -17,6 +17,7 @@
     "passport": "^0.4.0",
     "passport-pocket": "^1.0.0",
     "pocket-promise": "git+https://github.com/macdja38/pocket-promise.git",
+    "raven": "^2.6.4",
     "rethinkdbdash": "^2.3.31",
     "serve-favicon": "^2.5.0",
     "session-rethinkdb": "^2.0.1"
