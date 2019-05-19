@@ -32,8 +32,8 @@ const r = require('rethinkdbdash')({
 const RDBStoreSession = new RDBStore(session);
 
 const store = new RDBStoreSession(r, {
-  browserSessionsMaxAge: 5000, // optional, default is 60000 (60 seconds). Time between clearing expired sessions.
-  table: 'pocketSession' // optional, default is 'session'. Table to store sessions in.
+  browserSessionsMaxAge: 60000, // optional, default is 60000 (60 seconds). Time between clearing expired sessions.
+  table: 'pocketSession', // optional, default is 'session'. Table to store sessions in.
 });
 
 // Passport Set up
@@ -65,14 +65,14 @@ passport.deserializeUser(function (user, done) {
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   // https://github.com/expressjs/session#options
   secret: config.SECRET,
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 31 // ten seconds, for testing
+    maxAge: 1000 * 60 * 60 * 24 * 31, // ten seconds, for testing
   },
   store: store,
   resave: true,
@@ -91,7 +91,7 @@ app.get('/login',
     res.redirect(config.CLIENT_URL);
   });
 
-app.get('/auth/pocket/callback', passport.authenticate('pocket', {failureRedirect: '/login'}),
+app.get('/auth/pocket/callback', passport.authenticate('pocket', { failureRedirect: '/login' }),
   function (req, res) {
     res.redirect(config.CLIENT_URL);
   });

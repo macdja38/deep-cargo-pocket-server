@@ -6,19 +6,19 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "body-parser": "~1.17.1",
-    "cookie-parser": "~1.4.3",
-    "cors": "^2.8.4",
-    "debug": "~2.6.3",
-    "express": "~4.15.2",
-    "express-session": "^1.15.5",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "debug": "^4.1.1",
+    "express": "^4.17.0",
+    "express-session": "^1.16.1",
     "jade": "~1.11.0",
-    "morgan": "~1.8.1",
+    "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-pocket": "^1.0.0",
     "pocket-promise": "git+https://github.com/macdja38/pocket-promise.git",
     "rethinkdbdash": "^2.3.31",
-    "serve-favicon": "~2.4.2",
-    "session-rethinkdb": "^2.0.0"
+    "serve-favicon": "^2.5.0",
+    "session-rethinkdb": "^2.0.1"
   }
 }
