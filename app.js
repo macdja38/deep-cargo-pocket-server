@@ -97,6 +97,11 @@ app.get('/login',
     res.redirect(config.CLIENT_URL);
   });
 
+app.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect(config.CLIENT_URL);
+});
+
 app.get('/auth/pocket/callback', passport.authenticate('pocket', { failureRedirect: '/login' }),
   function (req, res) {
     res.redirect(config.CLIENT_URL);
